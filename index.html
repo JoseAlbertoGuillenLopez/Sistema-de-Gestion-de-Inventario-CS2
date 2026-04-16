@@ -1,0 +1,292 @@
+<!DOCTYPE html> 
+<html> 
+    <head>
+        <meta charset="UTF-8">
+        <title>Inventario CS2</title>
+        <link rel="stylesheet" href="CSS/style.css">
+    </head>
+    <body>
+        <div class="container">
+
+        <h2>Inventory</h2>
+
+        <button onclick="logout()">Logout</button>
+
+        <h3>Crear Artículo</h3>
+
+        <!-- al cambiar el combobox de armas, se llama a la función cargarSkins() para actualizar el segundo combobox con las skins -->
+        <div class="form-container">
+            <select id="weapon" onchange="cargarSkins()">
+                <option value="">Cargando armas...</option>
+            </select>
+            
+            <select id="skin" onchange="cargarRareza()" disabled>
+                <option value="">Primero selecciona un arma</option>
+            </select>
+            
+            <input id="rarity" placeholder="Rareza" type="text" readonly>
+            <input id="floatt" placeholder="Float (ej. 0.014)" type="number" step="0.001" min="0" max="1" oninput="if(this.value > 1) this.value = 1; if(this.value < 0) this.value = 0;">
+            <input id="price" placeholder="Precio" type="number" step="0.01" min="0">
+
+            <button onclick="crear()">Crear</button>
+        </div>
+
+        <h3>Lista</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Arma</th>
+                    <th>Skin</th>
+                    <th>Rareza</th>
+                    <th>Float</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla"></tbody>
+        </table>
+
+        <script>
+            
+            function checkSession() {
+                return fetch("http://127.0.0.1:3000/perfil", { credentials: "include" })
+                    .then(res => res.ok) //recibe la respuesta y devuelve true si el status es 200-299, false si es 401 o cualquier otro error
+                    .catch(() => false);
+            }
+
+            
+            let dbSkins = {}; // crea un objeto vacio
+            let editandoId = null; // Variable para saber si estamos editando un item (almacena el ID) o creando uno nuevo (null)
+
+            
+            function cargarJSONSkins() { 
+                fetch('csgoSkins.json')
+                    .then(response => response.json()) // convierte la respuesta en JSON
+                    .then(data => { //data contiene el JSON completo.
+
+                        
+                        data.forEach(item => {
+                            // Si el arma aún no existe en el objeto la creamos, hay muchas ak
+                            if (!dbSkins[item.weapon]) {
+                                dbSkins[item.weapon] = {};
+                            }
+                            // dbSkins["AK-47"]["Redline"] = "Classified"
+                            dbSkins[item.weapon][item.skin] = item.quality;
+                            // a la skin le asignas "Redline": "Classified",
+                        });
+                        
+                        inicializarCombos();
+                    })
+                    .catch(error => {
+                        console.error("Error cargando csgoSkins.json:", error);
+                        document.getElementById("weapon").innerHTML = '<option value="">Error al cargar armas</option>';
+                    });
+            }
+
+            
+            function inicializarCombos() {
+                const weaponSelect = document.getElementById("weapon");
+                weaponSelect.innerHTML = '<option value="">Selecciona un Arma</option>';
+                
+                // Extraemos los nombres de las armas y los ordenamos alfabéticamente
+                const armas = Object.keys(dbSkins).sort();
+                //Devuelve solo las claves del objeto, no los valores.
+                // dbSkins=armas, dbSkins[weapon]=skins, dbSkins[weapon][skin]=rarity
+                
+                armas.forEach(arma => {
+                    weaponSelect.insertAdjacentHTML('beforeend', `<option value="${arma}">${arma}</option>`);
+                });
+            }
+
+            function cargarSkins() {
+                const weapon = document.getElementById("weapon").value;
+                const skinSelect = document.getElementById("skin");
+                const rarityInput = document.getElementById("rarity");
+
+                skinSelect.innerHTML = '<option value="">Selecciona una Skin</option>';
+                rarityInput.value = "";
+
+                if (weapon && dbSkins[weapon]) {
+                    // si ya se seleccionó un arma y existe en el JSON
+                    skinSelect.disabled = false;
+                    
+                    const skins = Object.keys(dbSkins[weapon]).sort();
+                    skins.forEach(skin => {
+                        skinSelect.insertAdjacentHTML('beforeend', `<option value="${skin}">${skin}</option>`);
+                    });
+                } else {
+                    skinSelect.disabled = true;
+                    skinSelect.innerHTML = '<option value="">Primero selecciona un arma</option>';
+                }
+            }
+
+            function cargarRareza() {
+                const weapon = document.getElementById("weapon").value;
+                const skin = document.getElementById("skin").value;
+                const rarityInput = document.getElementById("rarity");
+                
+                if (weapon && skin && dbSkins[weapon][skin]) {
+                    rarityInput.value = dbSkins[weapon][skin];
+                } else {
+                    rarityInput.value = "";
+                }
+            }
+
+            // es el get de inventory, carga los datos de la base de datos y los muestra en la tabla
+            function cargar(){
+                fetch("http://127.0.0.1:3000/inventory",{
+                    credentials:"include"
+                })
+                .then(res=>{
+                    if(res.status==401){
+                        window.location="login.html"
+                    }
+                    return res.json()
+                    // convierte la respuesta en JSON para poder trabajar con ella en JavaScript
+                })
+                .then(data=>{
+                    let html = ""
+                    data.forEach(u=>{
+                        const rarityMap = {
+                            "Consumer Grade":   "rarity-consumer",
+                            "Industrial Grade": "rarity-industrial",
+                            "Mil-Spec Grade":   "rarity-milspec",
+                            "Restricted":       "rarity-restricted",
+                            "Classified":       "rarity-classified",
+                            "Covert":           "rarity-covert",
+                            "Contraband":       "rarity-contraband"
+                        };
+
+                        let rarityClass;
+                        if (rarityMap[u.rarity]) {
+                            rarityClass = rarityMap[u.rarity];
+                        } else {
+                            rarityClass = "";
+                        }
+                        html +=
+                        "<tr>"+
+                            "<td>"+u.id+"</td>"+
+                            "<td>"+u.weapon+"</td>"+
+                            "<td>"+u.skin+"</td>"+
+                            "<td class='"+rarityClass+"'>"+u.rarity+"</td>"+
+                            "<td>"+u.floatt+"</td>"+
+                            "<td>$"+u.price+"</td>"+
+                            "<td>"+
+                                "<button onclick='editar("+u.id+")'>Editar</button> "+
+                                "<button onclick='eliminar("+u.id+")'>Eliminar</button>"+
+                            "</td>"+
+                        "</tr>"
+                    })
+                    document.getElementById("tabla").innerHTML = html
+                })
+            }
+
+            function crear(){
+                const weapon = document.getElementById("weapon").value;
+                const skin = document.getElementById("skin").value;
+                const rarity = document.getElementById("rarity").value;
+                const floatt = document.getElementById("floatt").value;
+                const price = document.getElementById("price").value;
+                
+                if (!weapon || !skin || !rarity || !floatt || !price) {
+                    alert("Por favor completa todos los campos");
+                    return;
+                }
+
+                if (parseFloat(floatt) < 0 || parseFloat(floatt) > 1) {
+                    alert("El float debe estar entre 0 y 1");
+                    return;
+                }
+
+                const body = { weapon, skin, rarity, floatt, price };
+                if (editandoId) {
+                    url = "http://127.0.0.1:3000/inventory/" + editandoId;
+                    method = "PUT"; 
+                } else {
+                    url = "http://127.0.0.1:3000/inventory";
+                    method = "POST"; 
+                }
+
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify(body)
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error("Error al guardar"); //crea un nevo error que lo manda al catch
+                    return res.text(); //no es necesario
+                })
+                .then(() => {
+                    document.getElementById("weapon").value = "";
+                    cargarSkins(); 
+                    document.getElementById("floatt").value = "";
+                    document.getElementById("price").value = "";
+                    document.querySelector("button[onclick='crear()']").textContent = "Crear";
+                    editandoId = null;
+                    cargar();
+                })
+                .catch(error => alert("Error: " + error.message));
+            }
+
+            function editar(id){
+                // ya tienen id porque se lo pasamos desde el botón editar en la tabla, esto solo hace el get
+                fetch("http://127.0.0.1:3000/inventory", {
+                    credentials: "include"
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const item = data.find(u => u.id === id);
+                    // find cicla la data, u.id es como el identoficador i.id
+                    // encuentra el objeto cuyo id coincida con el que se pasó a la función y da el objeto item
+                    if (item) {
+                        editandoId = id;
+                        // primero se cambia es estado de editandoid y luego ya se va al crear
+                        document.getElementById("weapon").value = item.weapon;
+                        cargarSkins();
+                        document.getElementById("skin").value = item.skin;
+                        cargarRareza();
+                        document.getElementById("floatt").value = item.floatt;
+                        document.getElementById("price").value = item.price;
+                        document.querySelector("button[onclick='crear()']").textContent = "Actualizar";
+                        window.scrollTo(0, 0);
+                    }
+                });
+            }
+
+            function eliminar(id){
+                fetch("http://127.0.0.1:3000/inventory/"+id,{
+                    method:"DELETE",
+                    credentials:"include"
+                })
+                .then(()=>cargar())
+            }
+
+            function logout(){
+                fetch("http://127.0.0.1:3000/logout",{
+                    credentials:"include"
+                })
+                .then(()=>{
+                    window.location="login.html"
+                })
+            }
+
+            // Inicializamos la carga del JSON y de la tabla después de verificar sesión
+            checkSession().then(loggedIn => {
+                if (!loggedIn) {
+                    window.location = "login.html";
+                } else {
+                    cargarJSONSkins();
+                    cargar();
+                }
+            });
+
+        </script>
+
+        </div> <!-- /.container -->
+    </body>
+</html>

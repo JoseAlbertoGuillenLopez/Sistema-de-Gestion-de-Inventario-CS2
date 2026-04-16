@@ -1,0 +1,104 @@
+/* --- LOGIN CSS --- */
+body {
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex; /* los elementos hijos se organizan en una fila o columna  mas facilmente*/
+    justify-content: center;  /*eje horizontal*/
+    align-items: center;     /*eje vertical*/
+}
+
+.forma {
+    background: #0f1429;
+    border: 2px solid #ffd700;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15); /* Brillo dorado sutil */
+    width: 100%;
+    max-width: 380px;
+}
+
+/* Título dentro del login  */
+.forma h2, .forma h1 {
+    color: #ffd700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+
+.forma h3 {
+    color: #e0e0e0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    margin-top: 0;
+    opacity: 0.7;
+}
+
+input {
+    width: 100%;
+    background: #1a1f3a;
+    color: #e0e0e0;
+    border: 1px solid #ffd700;
+    padding: 12px;
+    margin: 10px 0 15px 0;
+    box-sizing: border-box; /*hace que el widht sea el que se pone ajustando margin y padding para que no exceda*/
+    border-radius: 4px;
+    transition: all 0.3s ease; /*junto con hover a todo el boton en .3 s suavemnete*/
+}
+
+input:focus {
+    outline: none;
+    border-color: #ffed4e;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    background: #252a45;
+}
+
+button {
+    width: 100%;
+    background: linear-gradient(135deg, #1a3a52 0%, #0f2438 100%);
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    padding: 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #2a4a62 0%, #1f3448 100%);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px); /*El botón se mueve 2 píxeles hacia arriba*/
+}
+
+.toggle {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+.toggle a {
+    color: #ffd700;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.toggle a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none;
+} 
