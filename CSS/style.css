@@ -182,3 +182,166 @@ tbody tr:hover {
     background: rgba(255, 215, 0, 0.1);
     transition: all 0.3s ease;
 }
+
+
+
+
+
+@media (max-width: 1024px) {
+    body {
+        padding: 15px;
+        font-size: 13px;
+    }
+    
+    .container {
+        max-width: 95%;
+    }
+    
+    h2 {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+    
+    h3 {
+        font-size: 16px;
+        margin: 15px 0 12px 0;
+    }
+    
+    select, input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+        min-width: 150px;
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    button {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+        font-size: 13px;
+    }
+    
+    .form-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    select, input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+        width: 100%;
+        min-width: unset;
+        padding: 9px;
+        font-size: 14px;
+    }
+    
+    button {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+    
+    h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    h3 {
+        font-size: 15px;
+        margin: 12px 0 10px 0;
+    }
+    
+    table {
+        font-size: 11px;
+        margin-top: 8px;
+    }
+    
+    th {
+        padding: 8px 4px;
+        font-size: 10px;
+    }
+    
+    td {
+        padding: 8px 4px;
+        font-size: 10px;
+    }
+    
+    table th:nth-child(1), table td:nth-child(1) { width: 6%; }
+    table th:nth-child(2), table td:nth-child(2) { width: 16%; }
+    table th:nth-child(3), table td:nth-child(3) { width: 20%; }
+    table th:nth-child(4), table td:nth-child(4) { width: 14%; }
+    table th:nth-child(5), table td:nth-child(5) { width: 10%; }
+    table th:nth-child(6), table td:nth-child(6) { width: 10%; }
+    table th:nth-child(7), table td:nth-child(7) { width: 24%; }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    .container {
+        max-width: 100%;
+    }
+    
+    .form-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    select, input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+        width: 100%;
+        min-width: unset;
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+    
+    h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    
+    h3 {
+        font-size: 13px;
+        margin: 10px 0 8px 0;
+    }
+    
+    table {
+        font-size: 9px;
+        margin-top: 5px;
+    }
+    
+    th {
+        padding: 6px 2px;
+        font-size: 9px;
+    }
+    
+    td {
+        padding: 6px 2px;
+        font-size: 9px;
+    }
+    
+    table th:nth-child(1), table td:nth-child(1) { width: 7%; }
+    table th:nth-child(2), table td:nth-child(2) { width: 15%; }
+    table th:nth-child(3), table td:nth-child(3) { width: 18%; }
+    table th:nth-child(4), table td:nth-child(4) { width: 13%; }
+    table th:nth-child(5), table td:nth-child(5) { width: 11%; }
+    table th:nth-child(6), table td:nth-child(6) { width: 11%; }
+    table th:nth-child(7), table td:nth-child(7) { width: 25%; }
+}

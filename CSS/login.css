@@ -1,4 +1,4 @@
-/* --- LOGIN CSS --- */
+
 body {
     background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
     color: #e0e0e0;
@@ -101,4 +101,77 @@ button:hover {
 
 .hidden {
     display: none;
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .forma {
+        padding: 30px 20px;
+        max-width: 90%;
+    }
+    
+    .forma h2, .forma h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    
+    .forma h3 {
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+    
+    input {
+        padding: 10px;
+        font-size: 16px;
+        margin: 8px 0 12px 0;
+    }
+    
+    button {
+        padding: 11px;
+        font-size: 14px;
+    }
+    
+    .toggle {
+        font-size: 12px;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        justify-content: flex-start;
+        padding-top: 40px;
+    }
+    
+    .forma {
+        padding: 25px 15px;
+        max-width: 100%;
+        border: 2px solid #ffd700;
+    }
+    
+    .forma h2, .forma h1 {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+    
+    .forma h3 {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+    
+    input {
+        padding: 9px;
+        font-size: 14px;
+        margin: 6px 0 10px 0;
+    }
+    
+    button {
+        padding: 10px;
+        font-size: 12px;
+    }
 } 
