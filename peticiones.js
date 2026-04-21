@@ -43,7 +43,7 @@ app.post("/register", async (req, res) => {
 });
 
 
-// ================= LOGIN =================
+// LOGIN 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     const sql = "SELECT * FROM users WHERE email=?";
@@ -68,13 +68,13 @@ app.post("/login", (req, res) => {
     });
 });
 
-// ================= LOGOUT =================
+// LOGOUT
 app.get("/logout", (req, res) => {
     req.session.destroy();
     res.send("Logout");
 });
 
-// ================= PERFIL =================
+//  PERFIL
 app.get("/perfil", (req, res) => {
     if (!req.session.usuario) {
         return res.status(401).send("No autorizado");
@@ -82,7 +82,7 @@ app.get("/perfil", (req, res) => {
     res.json(req.session.usuario);
 });
 
-// ================= CREATE =================
+//  CREATE 
 app.post("/inventory", async (req, res) => {
     if (!req.session.usuario) {
         return res.status(401).send("No autorizado");
@@ -107,7 +107,7 @@ app.post("/inventory", async (req, res) => {
     });
 });
 
-// ================= READ =================
+//  READ 
 app.get("/inventory", (req, res) => {
     if (!req.session.usuario) {
         return res.status(401).send("No autorizado");
@@ -121,7 +121,7 @@ app.get("/inventory", (req, res) => {
     });
 });
 
-// ================= UPDATE =================
+//  UPDATE 
 app.put("/inventory/:id", (req, res) => {
     if (!req.session.usuario) {
         return res.status(401).send("No autorizado");
@@ -150,7 +150,7 @@ app.put("/inventory/:id", (req, res) => {
     });
 });
 
-// ================= DELETE =================
+//  DELETE
 app.delete("/inventory/:id", (req, res) => {
     if (!req.session.usuario) {
         return res.status(401).send("No autorizado");
